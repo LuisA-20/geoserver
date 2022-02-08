@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio_2</title>
+    <script src=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.js "></script>
+    <link rel="stylesheet" href=" https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+
+    <style>
+        #map {
+            width: 100%;
+            height: 580px;
+            box-shadow: 5px 5px 5px #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
+                + 'contributors',
+            maxZoom: 18
+        });
+
+        var hidrografia = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: 'hidrografia',
+            format: 'image/png',
+            transparent: true,
+            tiled: true,
+            attribution: "Natural Earth"
+        });
+
+        var paises = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: 'Paises_Mundo',
+            format: 'image/png',
+            transparent: true,
+            tiled: true,
+            attribution: "Natural Earth"
+        });
+
+        var ciudad = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: 'ciudades',
+            format: 'image/png',
+            transparent: true,
+            tiled: true,
+            attribution: "Natural Earth"
+        });
+
+        var map = L.map('map', {
+            center: [1.61988, -75.60408],
+            layers: [osm, ciudad, hidrografia],
+            zoom: 15,
+            scrollWheelZoom: true
+        });
+
+        //Añadir un icono de marcador para la Universidad Uniamazonia
+
+        var marker = L.marker([1.61988, -75.60408], {
+            draggable: true,
+            title: 'pincha aquí'
+        }).addTo(map)
+            .bindPopup('Universidad de la Amazonia')
+            .openPopup();
+
+        //Añadir un icono de marcador para la alcaldia
+
+        var marker = L.marker([1.615100408029522, -75.6138592866009], {
+            draggable: true,
+            title: 'pincha aquí'
+        }).addTo(map)
+            .bindPopup('Alcaldia Florencia Caquetá')
+            .openPopup();
+
+
+        //Añadir un círculo para la alcaldia 
+        var circle = L.circle([1.615100408029522, -75.6138592866009], 500, {
+            color: 'red',
+            fillColor: '#000000',
+            fillOpacity: 0.5
+        }).addTo(map);
+        circle.bindPopup("Alcaldia de Florencia Caquetá");
+
+
+        //Añadir el marcador para la plaza de Santander
+
+        var marker = L.marker([1.6149286690115052, -75.61328009280281], {
+            draggable: true,
+            title: 'pincha aquí'
+        }).addTo(map)
+            .bindPopup('Plaza Santander')
+            .openPopup();
+
+        //Añadir un polígono
+        var polygon = L.polygon([
+            [1.6147040404819906, -75.61282152780218],
+            [1.6153964019985192, -75.6130317019282],
+            [1.6151746107437512, -75.61369979939177],
+            [1.6145080492005264, -75.61350255509535]
+
+        ], {
+            color: 'red',
+            fillColor: '#5D3AF9',
+            fillOpacity: 0.5
+
+        }).addTo(map)
+            .bindPopup('Parque Santander');
+
+
+        //Añadir una línea desde mi ubicación hasta la universidad
+        var pointA = new L.LatLng(1.61858500526471, -75.60397226758097);
+        var pointB = new L.LatLng(1.6190147938052197, -75.60441096918194);
+        var pointC = new L.LatLng(1.619744786462667, -75.60480408026635);
+        var pointD = new L.LatLng(1.6200928119570432, -75.60499283984385);
+        var pointE = new L.LatLng(1.620031855843977, -75.60440740730186);
+        var pointF = new L.LatLng(1.6200843242439638, -75.6040090450823);
+
+        var latlngs = [pointA, pointB,pointC,pointD,pointE,pointF];
+        var polyline = L.polyline(
+            latlngs, { color: 'red' }
+        )
+            .addTo(map)
+            .bindPopup('Mi ubicación Hasta la universidad');
+
+        L.control.scale().addTo(map);
+
+    </script>
+</body>
+
+</html>
